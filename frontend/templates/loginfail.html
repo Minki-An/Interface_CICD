@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <title>Interface DELIVERY</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <script>Vue.options.delimiters = ['<%', '%>']</script>
+</head>
+<style>
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  font-size: 40px;
+  background-color: #17a2b8; /* Background color changed */
+}
+
+.navbar-brand {
+  font-size: 24px;
+}
+
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand:focus {
+  color: white;
+}
+
+.navbar-dart {
+  background-color: #008080;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-btn-container {
+  text-align: center;
+}
+
+.form-btn {
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #008080;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-btn:hover {
+  background-color: #006666;
+}
+
+.form-alert {
+  margin-top: 10px;
+  color: red;
+  font-size: 16px;
+}
+
+.center-content {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 18px;
+}
+
+.center-content h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.center-content p {
+  margin-bottom: 20px;
+}
+
+</style>
+<body>
+    <nav class="navbar navbar-dart bg-primary">
+        <a href="/"><span class="navbar-brand">Interface DELIVERY - 주문</span></a>
+    </nav>
+    <div class="center-screen">
+        <div class="center-content">
+            <h2>로그인에 실패했습니다.</h2>
+            <p>올바른 사용자 이름과 비밀번호를 입력해주세요.</p>
+            <a href="/w/login" class="form-btn">로그인 화면으로 돌아가기</a>
+        </div>
+    </div>
+</body>
+</html>

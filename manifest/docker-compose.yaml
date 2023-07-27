@@ -1,0 +1,44 @@
+version: "3.3"
+
+services:
+  nginx:
+    image: "nginx:latest"
+    container_name: "nginx"
+    ports:
+      - "80:80"  # 호스트의 80 포트와 컨테이너의 80 포트 연결
+
+  order:
+    image: order-docker
+    container_name: "order-service"
+    labels:
+      - "nginx.server.location=/api/order"  # Nginx에서 /api/order 경로로 요청 전달
+    expose:
+      - 9001  # 컨테이너의 9001 포트 노출
+    restart: always  # 컨테이너 재시작 설정
+
+  front:
+    image: front-docker
+    container_name: "front-service"
+    labels:
+      - "nginx.server.location=/"  # Nginx에서 / 경로로 요청 전달
+    expose:
+      - 9000  # 컨테이너의 9000 포트 노출
+    restart: always  # 컨테이너 재시작 설정
+
+  store:
+    image: store-docker
+    container_name: "store-service"
+    labels:
+      - "nginx.server.location=/api/store"  # Nginx에서 /api/store 경로로 요청 전달
+    expose:
+      - 9003  # 컨테이너의 9003 포트 노출
+    restart: always  # 컨테이너 재시작 설정
+
+  user:
+    image: user-docker
+    container_name: "user-service"
+    labels:
+      - "nginx.server.location=/api/user"  # Nginx에서 /api/user 경로로 요청 전달
+    expose:
+      - 9002  # 컨테이너의 9002 포트 노출
+    restart: always  # 컨테이너 재시작 설정

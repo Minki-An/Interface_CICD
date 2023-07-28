@@ -8,7 +8,7 @@ import pymysql
 
 
 db_config = {
-    'host': '',  ## 실제 데이터베이스 주소 
+    'host': 'aaa',  ## 실제 데이터베이스 주소 
     'user': 'gasida',
     'password': 'qwe123',
     'db': 'products',

@@ -32,12 +32,14 @@ jobs:
           cat changed_apps.txt
 
       - name: Build and push Docker images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           cat changed_apps.txt | while read app; do
             if [ -d "$app" ]; then
               cd $app
-              docker build -t YOUR_ECR_REGISTRY/${app}-app:$GITHUB_SHA .
-              docker push YOUR_ECR_REGISTRY/${app}-app:$GITHUB_SHA
+              docker build -t $ECR_REGISTRY/${app}-app:$GITHUB_SHA .
+              docker push $ECR_REGISTRY/${app}-app:$GITHUB_SHA
               cd ..
             fi
           done

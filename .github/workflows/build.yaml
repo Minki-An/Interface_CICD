@@ -17,7 +17,7 @@ jobs:
         id: changes
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
-          grep -o 'app1\|app2\|app3\|app4' changed_files.txt > changed_apps.txt || echo "No changes"
+          grep -Eo '(frontend|user|order|store)' changed_files.txt > changed_apps.txt || echo "No changes"
           cat changed_apps.txt
 
       - name: Build and deploy changed apps
@@ -27,8 +27,10 @@ jobs:
           AWS_REGION: us-west-2  # 배포하고자 하는 리전으로 변경
         run: |
           cat changed_apps.txt | while read app; do
-            cd $app
-            # 각 어플리케이션 빌드 및 배포 작업 수행
-            # 예: npm install, npm build, aws s3 sync 등의 명령어 실행
-            cd ..
+            if [ -d "$app" ]; then
+              cd $app
+              # 각 어플리케이션 빌드 및 배포 작업 수행
+              # 예: npm install, npm build, aws s3 sync 등의 명령어 실행
+              cd ..
+            fi
           done

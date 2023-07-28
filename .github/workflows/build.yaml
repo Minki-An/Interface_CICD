@@ -35,7 +35,7 @@ jobs:
         id: changes
         run: |
           git diff --name-only ${{ github.event.before }} origin/main > changed_files.txt
-          grep -Eo '(frontend|user|order|store)' changed_files.txt > changed_apps.txt || echo "No changes"
+          grep -Eo '(frontend|user|order|store)' changed_files.txt | sort | uniq > changed_apps.txt || echo "No changes"
           cat changed_apps.txt
 
       - name: Build and push Docker images

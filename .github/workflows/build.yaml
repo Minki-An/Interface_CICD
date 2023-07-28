@@ -32,8 +32,6 @@ jobs:
           cat changed_apps.txt
 
       - name: Build and push Docker images
-        env:
-          AWS_REGION: us-west-2  # 배포하고자 하는 리전으로 변경
         run: |
           cat changed_apps.txt | while read app; do
             if [ -d "$app" ]; then

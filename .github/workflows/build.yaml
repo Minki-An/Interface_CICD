@@ -23,12 +23,15 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: fetch origin
+        id : fetch
+        run : git fetch origin ${{ github.ref }}
 
       - name: Determine changed directories
         id: changes
         run: |
-          git fetch origin ${{ github.ref }}
-          git diff --name-only HEAD~1 > changed_files.txt
+          git diff --name-only ${{ github.event.before }} origin/main > changed_files.txt
           grep -Eo '(frontend|user|order|store)' changed_files.txt > changed_apps.txt || echo "No changes"
           cat changed_apps.txt
 

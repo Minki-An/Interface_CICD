@@ -52,7 +52,6 @@ jobs:
       - name: Build and push Docker images
         id : image-info
         env:
-          ARGO: ${app}
           ECR_REPOSITORY: ${app}-app
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image.outputs.version }}
@@ -85,9 +84,14 @@ jobs:
           echo ${{ steps.login-ecr.outputs.registry }}
           echo ${{ steps.image-info.outputs.ecr_repository }}
           echo ${{ steps.image-info.outputs.image_tag }}
-          cd Interface-manifest-repo/overlays/${{ steps.image-info.outputs.argo_repo }}/
-          kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
-          cat kustomization.yaml
+          cat changed_apps.txt | while read app; do
+            if [ -d "$app" ]; then
+              cd Interface-manifest-repo/overlays/${app}
+              kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
+              cat kustomization.yaml
+              cd ..
+            fi
+          done
 
       - name: Commit files
         run: |

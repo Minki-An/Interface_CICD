@@ -42,6 +42,13 @@ jobs:
           fi
           cat changed_apps.txt
 
+      - name: Get image tag(verion)
+        id: image
+        run: |
+          VERSION=$(echo ${{ github.sha }} | cut -c1-8)
+          echo VERSION=$VERSION
+          echo "::set-output name=version::$VERSION"
+
       - name: Build and push Docker images
         env:
           ECR_REPOSITORY: ${app}-app

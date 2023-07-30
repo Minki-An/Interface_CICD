@@ -95,8 +95,12 @@ jobs:
 
       - name: Commit files
         run: |
-          cd Interface-manifest-repo
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git commit -am "Update image tag"
-          git push -u origin main
+          cat changed_apps.txt | while read app; do
+            if [ -d "$app" ]; then
+              cd ${app}-manifest-repo
+              git config --global user.email "github-actions@github.com"
+              git config --global user.name "github-actions"
+              git commit -am "Update image tag"
+              git push -u origin main
+            fi
+          done

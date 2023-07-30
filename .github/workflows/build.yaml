@@ -86,7 +86,7 @@ jobs:
           echo ${{ steps.image-info.outputs.image_tag }}
           cat changed_apps.txt | while read app; do
             if [ -d "$app" ]; then
-              cd Interface-manifest-repo/overlays/${app}
+              cd ${app}-manifest-repo/overlays/dev
               kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
               cat kustomization.yaml
               cd ..

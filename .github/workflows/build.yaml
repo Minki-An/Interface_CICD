@@ -48,6 +48,14 @@ jobs:
           VERSION=$(echo ${{ github.sha }} | cut -c1-8)
           echo VERSION=$VERSION
           echo "::set-output name=version::$VERSION"
+          
+      - name: Define urldecode function
+        run: |
+          urldecode() {
+            local url_encoded="${1//+/ }"
+            printf '%b' "${url_encoded//%/\\x}"
+          }
+          export -f urldecode
 
       - name: Build and push Docker images
         id : image-info

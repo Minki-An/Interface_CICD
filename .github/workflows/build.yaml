@@ -77,10 +77,10 @@ jobs:
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/$APPS-manifest-repo
+          repository: Minki-An/${{ env.APPS }}-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: $APPS-manifest-repo
+          path: ${{ env.APPS }}-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

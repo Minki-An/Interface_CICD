@@ -60,11 +60,12 @@ jobs:
           echo "::set-ouput name=app_repo::$APP"
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
-          urldecode() {
-          local url_encoded="${1//+/ }"
-          printf '%b' "${url_encoded//%/\\x}"
-          }
           readarray -t apps < changed_apps.txt
+          decoded_apps=()
+          for app in "${apps[@]}"; do
+            decoded_apps+=("$(urldecode "$app")")
+          done
+          echo "APPS=${decoded_apps[*]}" >> $GITHUB_ENV
           echo "APPS=${urldecode "${apps[*]}" >> $GITHUB_ENV
           cat changed_apps.txt | while read app; do
             if [ -d "$app" ]; then    

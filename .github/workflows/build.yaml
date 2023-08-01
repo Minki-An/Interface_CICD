@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [frontend, order, store, user]
  
     steps:
       - name: Checkout repo
@@ -49,14 +53,6 @@ jobs:
           echo VERSION=$VERSION
           echo "::set-output name=version::$VERSION"
           
-      - name: Define urldecode function
-        run: |
-          urldecode() {
-            local url_encoded="${1//+/ }"
-            printf '%b' "${url_encoded//%/\\x}"
-          }
-          export -f urldecode
-
       - name: Build and push Docker images
         id : image-info
         env:
@@ -69,12 +65,7 @@ jobs:
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
           readarray -t apps < changed_apps.txt
-          decoded_apps=()
-          for app in "${apps[@]}"; do
-            decoded_apps+=("$(urldecode "$app")")
-          done
-          echo "APPS=${decoded_apps[*]}" >> $GITHUB_ENV
-          echo "APPS=${urldecode "${apps[*]}" >> $GITHUB_ENV
+          echo "APPS=${apps[*]}" >> $GITHUB_ENV
           cat changed_apps.txt | while read app; do
             if [ -d "$app" ]; then    
               cd $app
@@ -90,10 +81,10 @@ jobs:
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/${{ env.APPS }}-manifest-repo
+          repository: Minki-An/frontend-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: ${{ env.APPS }}-manifest-repo
+          path: frontend-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

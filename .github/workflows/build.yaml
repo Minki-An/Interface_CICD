@@ -52,6 +52,7 @@ jobs:
       - name: Build and push Docker images
         id : image-info
         env:
+          APP: ${app}
           ECR_REPOSITORY: ${app}-app
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image.outputs.version }}
@@ -70,32 +71,14 @@ jobs:
 
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
-
-      - name: Read changed_apps.txt and assign to variable
-        id: read_apps
-        run: |
-          IFS=$'\n' read -d '' -ra apps < changed_apps.txt
-          app=$(IFS=,; echo "${apps[*]}")
-          echo "app=$app" >> $GITHUB_ENV
         
-
-      - name: Check if changed_apps.txt is empty
-        run: |
-          if [[ -z "${{ steps.read_apps.outputs.app }}" ]]; then
-            echo "No changes in apps. Skipping the rest of the workflow."
-            exit 0
-          fi
-
-      - name: Set app environment variable
-        run: echo "app=$app" >> $GITHUB_ENV
-
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/${{ env.app }}-manifest-repo
+          repository: Minki-An/$APP-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: ${{ env.app }}-manifest-repo
+          path: $APP-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

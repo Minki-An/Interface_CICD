@@ -71,13 +71,18 @@ jobs:
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
 
+      - name: Read changed_apps.txt and assign to variable
+        run: |
+          app=$(cat changed_apps.txt)
+          echo "Apps: $app"
+
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/Interface-manifest-repo
+          repository: Minki-An/${{ app }}-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: Interface-manifest-repo
+          path: ${{ app }}-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

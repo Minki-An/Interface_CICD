@@ -131,7 +131,7 @@ def complete_order(orderId):
 
         # orders 테이블에 주문 정보와 상품 정보 저장
         save_order(order_id, name, store, price)
-        return jsonify({'message': '주문이 완료되었습니다..'}), 200
+        return jsonify({'message': '주문이 완료되었습니다.'}), 200
     else:
         return jsonify({'message': '상품 정보를 가져오는 데에 실패했습니다..'}), 500
 

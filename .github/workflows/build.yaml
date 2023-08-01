@@ -72,12 +72,19 @@ jobs:
         uses: imranismail/setup-kustomize@v1
 
       - name: Read changed_apps.txt and assign to variable
+        id: read_apps
         run: |
-          # read each line of changed_apps.txt into an array
           IFS=$'\n' read -d '' -ra apps < changed_apps.txt
-
-          # join array elements into a single comma-separated string
           app=$(IFS=,; echo "${apps[*]}")
+          echo "app=$app" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: Check if changed_apps.txt is empty
+        run: |
+          if [[ -z "${{ steps.read_apps.outputs.app }}" ]]; then
+            echo "No changes in apps. Skipping the rest of the workflow."
+            exit 0
+          fi
 
       - name: Set app environment variable
         run: echo "app=$app" >> $GITHUB_ENV

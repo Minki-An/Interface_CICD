@@ -115,7 +115,7 @@ jobs:
           while IFS= read -r app; do
             if [ -d "$app" ]; then
               cd "${app}-manifest-repo/overlays/dev"
-              kustomize edit set image "***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app=***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app:75c2b7f5"
+              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
               cat kustomization.yaml
               cd ..
             fi

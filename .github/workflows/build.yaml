@@ -77,7 +77,7 @@ jobs:
           IFS=$'\n' read -d '' -ra apps < changed_apps.txt
           app=$(IFS=,; echo "${apps[*]}")
           echo "app=$app" >> $GITHUB_ENV
-        continue-on-error: true
+        
 
       - name: Check if changed_apps.txt is empty
         run: |

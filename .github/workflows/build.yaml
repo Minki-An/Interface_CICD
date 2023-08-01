@@ -67,7 +67,6 @@ jobs:
               cd $app
               docker build -t $ECR_REGISTRY/${app}-app:$IMAGE_TAG .
               docker push $ECR_REGISTRY/${app}-app:$IMAGE_TAG
-              cd ..
             fi
           done
 

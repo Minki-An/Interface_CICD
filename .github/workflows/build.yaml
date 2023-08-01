@@ -60,8 +60,10 @@ jobs:
           echo "::set-ouput name=app_repo::$APP"
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
+          readarray -t apps < changed_apps.txt
+          echo "APPS=${apps[*]}" >> $GITHUB_ENV
           cat changed_apps.txt | while read app; do
-            if [ -d "$app" ]; then
+            if [ -d "$app" ]; then    
               cd $app
               docker build -t $ECR_REGISTRY/${app}-app:$IMAGE_TAG .
               docker push $ECR_REGISTRY/${app}-app:$IMAGE_TAG
@@ -75,10 +77,10 @@ jobs:
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/$APP-manifest-repo
+          repository: Minki-An/$APPS-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: $APP-manifest-repo
+          path: $APPS-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

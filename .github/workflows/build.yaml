@@ -112,21 +112,13 @@ jobs:
           echo ${{ steps.login-ecr.outputs.registry }}
           echo ${{ steps.image-info.outputs.ecr_repository }}
           echo ${{ steps.image-info.outputs.image_tag }}
-          cat changed_apps.txt | while read app1 app2; do
-            if [ -d "$app1" ]; then
-             cd ${app1}-manifest-repo/overlays/dev
-              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
+          cat changed_apps.txt | while read app; do
+            if [ -d "$app" ]; then
+              cd ${app}-manifest-repo/overlays/dev
+              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${app}-app=${{ steps.login-ecr.outputs.registry}}/${app}-app:${{ steps.image-info.outputs.image_tag }}
               cat kustomization.yaml
             fi
-          done		  
-
-            if [ -d "$app2" ]; then
-              cd "${app2}-manifest-repo"
-              cd ${app2}-manifest-repo/overlays/dev
-              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
-              cat kustomization.yaml
-            fi
-          done		  
+          done
 
 
 

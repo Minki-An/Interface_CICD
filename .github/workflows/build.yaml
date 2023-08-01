@@ -57,7 +57,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image.outputs.version }}
         run: |
-          echo "::set-ouput name=argo_repo::$ARGO"
+          echo "::set-ouput name=app_repo::$APP"
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
           cat changed_apps.txt | while read app; do

@@ -112,14 +112,24 @@ jobs:
           echo ${{ steps.login-ecr.outputs.registry }}
           echo ${{ steps.image-info.outputs.ecr_repository }}
           echo ${{ steps.image-info.outputs.image_tag }}
-          while IFS= read -r app; do
-            if [ -d "$app" ]; then
-              cd "${app}-manifest-repo/overlays/dev"
-              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
-              cat kustomization.yaml
-              cd ..
+          cat changed_apps.txt | while read app; do
+            if [ "$app" = "front" ]; then
+              if [ -d "${app}-manifest-repo/overlays/dev" ]; then
+                cd "${app}-manifest-repo/overlays/dev"
+                kustomize edit set image "***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app=***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app:75c2b7f5"
+                cat kustomization.yaml
+                cd ..
+              fi
+            elif [ "$app" = "order" ]; then
+              if [ -d "${app}-manifest-repo/overlays/dev" ]; then
+                cd "${app}-manifest-repo/overlays/dev"
+                kustomize edit set image "***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app=***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app:712c51e1"
+                cat kustomization.yaml
+                cd ..
+              fi
             fi
-          done < changed_apps.txt
+          done
+
 
       - name: Commit files
         run: |

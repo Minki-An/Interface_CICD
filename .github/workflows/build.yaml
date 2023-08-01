@@ -38,7 +38,7 @@ jobs:
           grep -Eo '(frontend|user|order|store)' changed_files.txt | sort | uniq > changed_apps.txt 
           if [ ! -s "changed_apps.txt" ]; then
             echo "No changes"
-            exit 0
+            exit 1
           fi
           cat changed_apps.txt
 

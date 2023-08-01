@@ -8,7 +8,7 @@ import pymysql
 
 
 db_config = {
-    'host': '3.36.69.71',  ## 실제 데이터베이스 주소 
+    'host': '43.202.54.126',  ## 실제 데이터베이스 주소 
     'user': 'gasida',
     'password': 'qwe123',
     'db': 'products',
@@ -87,7 +87,7 @@ def order(oid):
                 break
 
         # 가게 정보 조회
-        response = requests.get("http://k8s-green-5ca3ac43a6-1666875450.ap-northeast-2.elb.amazonaws.com/api/store/" + sid)
+        response = requests.get("http://k8s-green-5ca3ac43a6-1240869498.ap-northeast-2.elb.amazonaws.com/api/store/" + sid)
         store_status = response.json()
 
         return store_status

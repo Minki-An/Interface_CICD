@@ -123,7 +123,7 @@
                         if (response.data) {
                             axios({
                                 method: "get",
-                                url: "http://k8s-green-5ca3ac43a6-1666875450.ap-northeast-2.elb.amazonaws.com/api/order/" + orderId,
+                                url: "http://k8s-green-5ca3ac43a6-1240869498.ap-northeast-2.elb.amazonaws.com/api/order/" + orderId,
                                 timeout: 3000,
                                 responseType: 'json',
                             }).then(response => {
@@ -132,7 +132,7 @@
                                     // 주문이 완료되었을 때 '/api/order/complete' 엔드포인트로 요청 보냄
                                     axios({
                                         method : "post",
-                                        url: 'http://k8s-green-5ca3ac43a6-1666875450.ap-northeast-2.elb.amazonaws.com/api/order/complete/' + orderId,
+                                        url: 'http://k8s-green-5ca3ac43a6-1240869498.ap-northeast-2.elb.amazonaws.com/api/order/complete/' + orderId,
                                         data : {orderId : orderId}
                                          })
                                         .then(response => {
@@ -160,7 +160,7 @@
                 fetchData() {
                     axios({
                         method: "get",
-                        url: "http://k8s-green-5ca3ac43a6-1666875450.ap-northeast-2.elb.amazonaws.com/api/order",
+                        url: "http://k8s-green-5ca3ac43a6-1240869498.ap-northeast-2.elb.amazonaws.com/api/order",
                         timeout: 3000,
                         responseType: 'json',
                     }).then(response => {

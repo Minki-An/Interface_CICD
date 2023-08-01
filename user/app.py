@@ -10,7 +10,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 CORS(app)
 
 db_config = {
-    'host': '3.36.69.71',
+    'host': '43.202.54.126',
     'user': 'gasida',
     'password': 'qwe123',
     'db': 'userinfo',

@@ -112,23 +112,24 @@ jobs:
           echo ${{ steps.login-ecr.outputs.registry }}
           echo ${{ steps.image-info.outputs.ecr_repository }}
           echo ${{ steps.image-info.outputs.image_tag }}
-          cat changed_apps.txt | while read app; do
-            if [ "$app" = "front" ]; then
-              if [ -d "${app}-manifest-repo/overlays/dev" ]; then
-                cd "${app}-manifest-repo/overlays/dev"
-                kustomize edit set image "***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app=***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app:75c2b7f5"
-                cat kustomization.yaml
-                cd ..
-              fi
-            elif [ "$app" = "order" ]; then
-              if [ -d "${app}-manifest-repo/overlays/dev" ]; then
-                cd "${app}-manifest-repo/overlays/dev"
-                kustomize edit set image "***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app=***.dkr.ecr.ap-northeast-2.amazonaws.com/${app}-app:712c51e1"
-                cat kustomization.yaml
-                cd ..
-              fi
+          cat changed_apps.txt | while read app1 app2; do
+            if [ -d "$app1" ]; then
+              cd "${app1}-manifest-repo"
+              git config --global user.email "github-actions@github.com"
+              git config --global user.name "github-actions"
+              git commit -am "Update image tag"
+              git push -u origin main
+            fi
+
+            if [ -d "$app2" ]; then
+              cd "${app2}-manifest-repo"
+              git config --global user.email "github-actions@github.com"
+              git config --global user.name "github-actions"
+              git commit -am "Update image tag"
+              git push -u origin main
             fi
           done
+
 
 
       - name: Commit files

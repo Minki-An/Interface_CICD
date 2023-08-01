@@ -74,13 +74,38 @@ jobs:
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         
-      - name: Checkout kustomize repository
+      - name: Checkout frontend repository
         uses: actions/checkout@v2
         with:
           repository: Minki-An/frontend-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
           path: frontend-manifest-repo
+
+      - name: Checkout user repository
+        uses: actions/checkout@v2
+        with:
+          repository: Minki-An/user-manifest-repo
+          ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: user-manifest-repo
+
+      - name: Checkout store repository
+        uses: actions/checkout@v2
+        with:
+          repository: Minki-An/store-manifest-repo
+          ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: store-manifest-repo
+
+      - name: Checkout order repository
+        uses: actions/checkout@v2
+        with:
+          repository: Minki-An/order-manifest-repo
+          ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: order-manifest-repo
+
 
       - name: Update Kubernetes resources
         run: |

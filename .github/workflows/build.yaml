@@ -73,8 +73,14 @@ jobs:
 
       - name: Read changed_apps.txt and assign to variable
         run: |
-          app=$(cat changed_apps.txt)
-          echo "app=$app" >> $GITHUB_ENV
+          # read each line of changed_apps.txt into an array
+          IFS=$'\n' read -d '' -ra apps < changed_apps.txt
+
+          # join array elements into a single comma-separated string
+          app=$(IFS=,; echo "${apps[*]}")
+
+      - name: Set app environment variable
+        run: echo "app=$app" >> $GITHUB_ENV
 
       - name: Checkout kustomize repository
         uses: actions/checkout@v2

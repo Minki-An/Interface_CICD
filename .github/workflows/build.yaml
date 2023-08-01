@@ -74,7 +74,7 @@ jobs:
       - name: Read changed_apps.txt and assign to variable
         run: |
           app=$(cat changed_apps.txt)
-          echo "$app" >> $GITHUB_ENV
+          echo "app=$app" >> $GITHUB_ENV
 
       - name: Checkout kustomize repository
         uses: actions/checkout@v2

@@ -91,7 +91,7 @@ jobs:
           echo ${{ steps.image-info.outputs.image_tag }}
           if grep -q "${{ matrix.service }}" changed_apps.txt; then
             echo "Kustomize ${{ matrix.service }} "
-            kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${app1}-app=${{ steps.login-ecr.outputs.registry}}/${app1}-app:${{ steps.image-info.outputs.image_tag }}
+            kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ matrix.service }}}-app=${{ steps.login-ecr.outputs.registry}}/${{ matrix.service }}-app:${{ steps.image-info.outputs.image_tag }}
           else
             echo "${{ matrix.service }} not changed"
           fi
@@ -101,7 +101,7 @@ jobs:
       - name: Commit files
         run: |
           if grep -q "${{ matrix.service }}" changed_apps.txt; then
-            cd ${app}-manifest-repo
+            cd ${{ matrix.service }}-manifest-repo
             git config --global user.email "github-actions@github.com"
             git config --global user.name "github-actions"
             git commit -am "Update image tag"

@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        service: [frontend, order, store, user]
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -31,14 +35,15 @@ jobs:
         id : fetch
         run : git fetch origin ${{ github.ref }}
 
-      - name: Determine changed directories
+      - name: Determine changed services
         id: changes
         run: |
           git diff --name-only ${{ github.event.before }} origin/main > changed_files.txt
           grep -Eo '(frontend|user|order|store)' changed_files.txt | sort | uniq > changed_apps.txt 
-          if [ ! -s "changed_apps.txt" ]; then
-            echo "No changes"
-            exit 1
+          if grep -q "${{ matrix.service }}" changed_apps.txt; then
+            echo "${{ matrix.service }} changes"
+          else
+            echo "${{ matrix.service }} not changed"
           fi
           cat changed_apps.txt
 
@@ -62,13 +67,15 @@ jobs:
           echo "::set-output name=image_tag::$IMAGE_TAG"
 
 
-          cat changed_apps.txt | while read app; do
-            if [ -d "$app" ]; then    
-              cd $app
-              docker build -t $ECR_REGISTRY/${app}-app:$IMAGE_TAG .
-              docker push $ECR_REGISTRY/${app}-app:$IMAGE_TAG
+          SERVICE="${{ matrix.service }}"
+
+          while read -r app; do
+            if [ -d "$app" ] && grep -q "$SERVICE" "$app"; then
+              cd $SERVICE
+              docker build -t $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG .
+              docker push $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG
             fi
-          done
+          done < changed_apps.txt
 
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1

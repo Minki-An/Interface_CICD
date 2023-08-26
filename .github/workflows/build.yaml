@@ -92,10 +92,11 @@ jobs:
           if grep -q "${{ matrix.service }}" changed_apps.txt; then
             echo "Kustomize ${{ matrix.service }} "
             kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ matrix.service }}}-app=${{ steps.login-ecr.outputs.registry}}/${{ matrix.service }}-app:${{ steps.image-info.outputs.image_tag }}
+            cat kustomization.yaml
           else
             echo "${{ matrix.service }} not changed"
           fi
-          cat kustomization.yaml
+          
 
 
       - name: Commit files

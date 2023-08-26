@@ -57,18 +57,14 @@ jobs:
       - name: Build and push Docker images
         id : image-info
         env:
-          APP: ${app}
-          ECR_REPOSITORY: ${app}-app
+          ECR_REPOSITORY: ${{ matrix.service }}-app   
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image.outputs.version }}
         run: |
-          echo "::set-ouput name=app_repo::$APP"
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
-
-
           SERVICE="${{ matrix.service }}"
-
+          
           while read -r app; do
             if [ -d "$app" ] && grep -q "$SERVICE" "$app"; then
               cd $SERVICE
@@ -83,36 +79,10 @@ jobs:
       - name: Checkout frontend repository
         uses: actions/checkout@v2
         with:
-          repository: Minki-An/frontend-manifest-repo
+          repository: Minki-An/${{ matrix.service }}-manifest-repo
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
-          path: frontend-manifest-repo
-
-      - name: Checkout user repository
-        uses: actions/checkout@v2
-        with:
-          repository: Minki-An/user-manifest-repo
-          ref: main
-          token: ${{ secrets.ACTION_TOKEN }}
-          path: user-manifest-repo
-
-      - name: Checkout store repository
-        uses: actions/checkout@v2
-        with:
-          repository: Minki-An/store-manifest-repo
-          ref: main
-          token: ${{ secrets.ACTION_TOKEN }}
-          path: store-manifest-repo
-
-      - name: Checkout order repository
-        uses: actions/checkout@v2
-        with:
-          repository: Minki-An/order-manifest-repo
-          ref: main
-          token: ${{ secrets.ACTION_TOKEN }}
-          path: order-manifest-repo
-
-
+          path: ${{ matrix.service }}-manifest-repo
 
       - name: Update Kubernetes resources
         run: |

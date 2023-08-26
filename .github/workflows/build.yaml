@@ -89,29 +89,22 @@ jobs:
           echo ${{ steps.login-ecr.outputs.registry }}
           echo ${{ steps.image-info.outputs.ecr_repository }}
           echo ${{ steps.image-info.outputs.image_tag }}
-          cat changed_apps.txt | while read app1 app2; do
-            if [ -d "$app1" ]; then
-              cd ${app1}-manifest-repo/overlays/dev
-              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${app1}-app=${{ steps.login-ecr.outputs.registry}}/${app1}-app:${{ steps.image-info.outputs.image_tag }}
-              cat kustomization.yaml
-            fi
-            if [ -d "$app2" ]; then
-              cd ${app2}-manifest-repo/overlays/dev
-              kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${app2}-app=${{ steps.login-ecr.outputs.registry}}/${app2}-app:${{ steps.image-info.outputs.image_tag }}
-              cat kustomization.yaml
-            fi
-          done
-
+          if grep -q "${{ matrix.service }}" changed_apps.txt; then
+            echo "Kustomize ${{ matrix.service }} "
+            kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${app1}-app=${{ steps.login-ecr.outputs.registry}}/${app1}-app:${{ steps.image-info.outputs.image_tag }}
+          else
+            echo "${{ matrix.service }} not changed"
+          fi
+          cat kustomization.yaml
 
 
       - name: Commit files
         run: |
-          cat changed_apps.txt | while read app; do
-            if [ -d "$app" ]; then
-              cd ${app}-manifest-repo
-              git config --global user.email "github-actions@github.com"
-              git config --global user.name "github-actions"
-              git commit -am "Update image tag"
-              git push -u origin main
-            fi
+          if grep -q "${{ matrix.service }}" changed_apps.txt; then
+            cd ${app}-manifest-repo
+            git config --global user.email "github-actions@github.com"
+            git config --global user.name "github-actions"
+            git commit -am "Update image tag"
+            git push -u origin main
+          fi
           done

@@ -63,15 +63,15 @@ jobs:
         run: |
           echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
           echo "::set-output name=image_tag::$IMAGE_TAG"
-          SERVICE="${{ matrix.service }}"
           
-          while read -r app; do
-            if [ -d "$app" ] && grep -q "$SERVICE" "$app"; then
-              cd $SERVICE
-              docker build -t $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG .
-              docker push $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG
-            fi
-          done < changed_apps.txt
+          if grep -q "${{ matrix.service }}" changed_apps.txt; then
+            echo "${{ matrix.service }} build"
+            cd ${{ matrix.service }}
+            docker build -t $ECR_REGISTRY/${{ matrix.service }}-app:$IMAGE_TAG .
+            docker push $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG
+          else
+            echo "${{ matrix.service }} not changed"
+          fi
 
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1

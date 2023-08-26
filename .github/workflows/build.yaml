@@ -68,7 +68,7 @@ jobs:
             echo "${{ matrix.service }} build"
             cd ${{ matrix.service }}
             docker build -t $ECR_REGISTRY/${{ matrix.service }}-app:$IMAGE_TAG .
-            docker push $ECR_REGISTRY/${SERVICE}-app:$IMAGE_TAG
+            docker push $ECR_REGISTRY/${{ matrix.service }}-app:$IMAGE_TAG
           else
             echo "${{ matrix.service }} not changed"
           fi

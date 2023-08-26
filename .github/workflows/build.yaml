@@ -3,7 +3,7 @@ name: Build Applications
 on:
   push:
     branches:
-      - main  # 빌드하고자 하는 브랜치로 변경
+      - main  
 
 jobs:
   build:
@@ -18,8 +18,7 @@ jobs:
         uses: actions/checkout@v2
         with: 
           fetch-depth: 0
-
-
+          
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -30,10 +29,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        
-      - name: fetch origin
-        id : fetch
-        run : git fetch origin ${{ github.ref }}
 
       - name: Determine changed services
         id: changes
@@ -76,7 +71,7 @@ jobs:
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         
-      - name: Checkout frontend repository
+      - name: Checkout ${{ matrix.service }} repository
         uses: actions/checkout@v2
         with:
           repository: Minki-An/${{ matrix.service }}-manifest-repo
@@ -97,8 +92,6 @@ jobs:
           else
             echo "${{ matrix.service }} not changed"
           fi
-          
-
 
       - name: Commit files
         run: |

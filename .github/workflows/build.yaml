@@ -44,6 +44,7 @@ jobs:
             echo "${{ matrix.service }} changes"
           else
             echo "${{ matrix.service }} not changed"
+            exit 1
           fi
           cat changed_apps.txt
 
